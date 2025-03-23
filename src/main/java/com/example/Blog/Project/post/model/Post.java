@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -42,8 +43,5 @@ public class Post {
     private String logo;
 
     @ManyToMany
-    private Set<Category> categories;
-
-    public Post(String testTitle, String testContent, String testDescription, String testLogo, Object o) {
-    }
+    private Set<Category> categories = new HashSet<>();
 }

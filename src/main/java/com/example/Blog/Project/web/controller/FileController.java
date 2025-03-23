@@ -5,6 +5,7 @@ import com.example.Blog.Project.file.model.FileResponse;
 import com.example.Blog.Project.file.service.FileService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class FileController {
     private FileService fileService;
 
     @GetMapping(value = "/{uuid}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<byte[]> findByUuid(@Valid @NotBlank @PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<byte[]> findByUuid(@Valid @NotNull @PathVariable("uuid") UUID uuid) {
         return ResponseEntity.ok(fileService.findByUuid(uuid));
     }
 

@@ -1,14 +1,15 @@
 package com.example.Blog.Project.integration.data;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.example.Blog.Project.category.model.Category;
+import com.example.Blog.Project.category.repository.CategoryRepository;
 import com.example.Blog.Project.permission.model.Permission;
 import com.example.Blog.Project.permission.model.PermissionOption;
 import com.example.Blog.Project.permission.repository.PermissionRepository;
+import com.example.Blog.Project.post.model.Post;
+import com.example.Blog.Project.post.repository.PostRepository;
 import com.example.Blog.Project.refreshtoken.model.RefreshToken;
 import com.example.Blog.Project.refreshtoken.repository.RefreshTokenRepository;
 import com.example.Blog.Project.role.model.Role;
@@ -21,6 +22,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Seeder {
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -78,6 +85,23 @@ public class Seeder {
         return roleRepository.save(role);
     }
 
+    public Post post(String title, String description, String content, String logo, Set<Category> categories) {
+        Post post = new Post();
+        post.setTitle(title);
+        post.setLogo(logo);
+        post.setContent(content);
+        post.setCategories(new HashSet<>(categories));
+
+        return postRepository.save(post);
+    }
+
+    public Category category(String title) {
+        Category category = new Category();
+        category.setTitle(title);
+
+        return categoryRepository.save(category);
+    }
+
     public RefreshToken refreshToken(String token, Instant expiresAt, User user, String oldToken) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(token);
@@ -105,5 +129,7 @@ public class Seeder {
         userRepository.deleteAll();
         roleRepository.deleteAll();
         permissionRepository.deleteAll();
+        postRepository.deleteAll();
+        categoryRepository.deleteAll();
     }
 }

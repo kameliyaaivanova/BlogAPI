@@ -4,6 +4,7 @@ import com.example.Blog.Project.role.model.Role;
 import com.example.Blog.Project.role.service.RoleService;
 import com.example.Blog.Project.user.model.User;
 import com.example.Blog.Project.web.dto.AddRolePayload;
+import com.example.Blog.Project.web.dto.UpdateRolePayload;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,8 +34,8 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Role> update(@PathVariable long id, @Valid @RequestBody Role role){
-        return ResponseEntity.ok(roleService.update(id, role));
+    public ResponseEntity<Role> update(@PathVariable long id, @Valid @RequestBody UpdateRolePayload updateRolePayload){
+        return ResponseEntity.ok(roleService.update(id, updateRolePayload));
     }
 
     @PostMapping("/add")

@@ -1,7 +1,9 @@
 package com.example.Blog.Project.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +50,27 @@ public class GlobalExceptionHandler {
                 .body(new GlobalError(
                         List.of(ex.getMessage()),
                         HttpStatus.CONFLICT.value(),
+                        Instant.now()
+                ));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<GlobalError> handleAuthenticationException(AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new GlobalError(
+                        List.of(ex.getMessage()),
+                        HttpStatus.UNAUTHORIZED.value(),
+                        Instant.now()
+                ));
+    }
+
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<GlobalError> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new GlobalError(
+                        List.of(ex.getMessage()),
+                        HttpStatus.NOT_FOUND.value(),
                         Instant.now()
                 ));
     }

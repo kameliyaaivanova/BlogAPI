@@ -3,11 +3,14 @@ package com.example.Blog.Project.web.controller;
 import com.example.Blog.Project.category.model.Category;
 import com.example.Blog.Project.category.service.CategoryService;
 import com.example.Blog.Project.web.dto.AddCategoryPayload;
+import com.example.Blog.Project.web.dto.UpdateCategoryPayload;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,8 +35,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> update(@PathVariable long id, @Valid @RequestBody Category category){
-        return ResponseEntity.ok(categoryService.update(id,category));
+    public ResponseEntity<Category> update(@PathVariable long id, @Valid @RequestBody UpdateCategoryPayload updateCategoryPayload){
+        return ResponseEntity.ok(categoryService.update(id,updateCategoryPayload));
     }
 
     @PostMapping("/add")

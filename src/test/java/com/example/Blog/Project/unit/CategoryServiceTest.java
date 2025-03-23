@@ -4,6 +4,7 @@ import com.example.Blog.Project.category.model.Category;
 import com.example.Blog.Project.category.repository.CategoryRepository;
 import com.example.Blog.Project.category.service.CategoryService;
 import com.example.Blog.Project.web.dto.AddCategoryPayload;
+import com.example.Blog.Project.web.dto.UpdateCategoryPayload;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,10 +30,8 @@ public class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
-
     @Test
     public void testGetAllCategories() {
-
         Pageable pageable = mock(Pageable.class);
         Category category = new Category();
         category.setTitle("Category 1");
@@ -50,18 +49,22 @@ public class CategoryServiceTest {
 
     @Test
     public void testUpdateCategory_Success() {
-
         long categoryId = 1L;
+
         Category existingCategory = new Category();
+        existingCategory.setId(categoryId);
         existingCategory.setTitle("Old Title");
 
+        UpdateCategoryPayload updatePayload = new UpdateCategoryPayload("New Title");
+
         Category updatedCategory = new Category();
-        updatedCategory.setTitle("New Title");
+        updatedCategory.setId(categoryId);
+        updatedCategory.setTitle(updatePayload.getTitle());
 
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(existingCategory));
         when(categoryRepository.save(any(Category.class))).thenReturn(updatedCategory);
 
-        Category result = categoryService.update(categoryId, updatedCategory);
+        Category result = categoryService.update(categoryId, updatePayload);
 
         assertNotNull(result);
         assertEquals("New Title", result.getTitle());
@@ -71,14 +74,15 @@ public class CategoryServiceTest {
 
     @Test
     public void testUpdateCategory_NotFound_ShouldThrowException() {
-
         long categoryId = 1L;
-        Category updatedCategory = new Category();
-        updatedCategory.setTitle("New Title");
+
+        UpdateCategoryPayload updatePayload = new UpdateCategoryPayload("New Title");
 
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> categoryService.update(categoryId, updatedCategory));
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () ->
+                categoryService.update(categoryId, updatePayload));
+
         assertEquals("Category not found", exception.getMessage());
 
         verify(categoryRepository).findById(categoryId);
@@ -87,7 +91,6 @@ public class CategoryServiceTest {
 
     @Test
     public void testCreateCategory_Success() {
-
         AddCategoryPayload addCategoryPayload = new AddCategoryPayload();
         addCategoryPayload.setTitle("New Category");
 
@@ -107,7 +110,6 @@ public class CategoryServiceTest {
 
     @Test
     public void testCreateCategory_TitleAlreadyExists_ShouldThrowException() {
-
         AddCategoryPayload addCategoryPayload = new AddCategoryPayload();
         addCategoryPayload.setTitle("Existing Category");
 
@@ -125,7 +127,6 @@ public class CategoryServiceTest {
 
     @Test
     public void testFindById_Success() {
-
         long categoryId = 1L;
         Category existingCategory = new Category();
         existingCategory.setTitle("Category 1");
@@ -141,7 +142,6 @@ public class CategoryServiceTest {
 
     @Test
     public void testFindById_NotFound_ShouldThrowException() {
-
         long categoryId = 1L;
 
         when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());

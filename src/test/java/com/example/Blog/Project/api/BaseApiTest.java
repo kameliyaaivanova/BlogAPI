@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class})
 public class BaseApiTest {
 
     @MockitoBean

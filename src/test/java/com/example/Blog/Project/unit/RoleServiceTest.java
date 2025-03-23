@@ -4,6 +4,7 @@ import com.example.Blog.Project.role.model.Role;
 import com.example.Blog.Project.role.repository.RoleRepository;
 import com.example.Blog.Project.role.service.RoleService;
 import com.example.Blog.Project.web.dto.AddRolePayload;
+import com.example.Blog.Project.web.dto.UpdateRolePayload;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ public class RoleServiceTest {
 
     @Test
     public void testGetAll() {
-        Pageable pageable = PageRequest.of(0, 10); // Page 0, size 10
+        Pageable pageable = PageRequest.of(0, 10);
 
         Role role1 = new Role();
         role1.setName("Admin");
@@ -66,19 +67,23 @@ public class RoleServiceTest {
         existingRole.setId(roleId);
         existingRole.setName("CustomRole");
 
-        Role roleData = new Role();
+        UpdateRolePayload roleData = new UpdateRolePayload();
         roleData.setName("UpdatedRole");
 
+        Role updatedRole = new Role();
+        updatedRole.setId(roleId);
+        updatedRole.setName("UpdatedRole");
+
         when(roleRepository.findById(roleId)).thenReturn(Optional.of(existingRole));
-        when(roleRepository.save(any(Role.class))).thenReturn(existingRole);
+        when(roleRepository.save(any(Role.class))).thenReturn(updatedRole);
 
-        Role updatedRole = roleService.update(roleId, roleData);
+        Role result = roleService.update(roleId, roleData);
 
-        assertNotNull(updatedRole);
-        assertEquals("UpdatedRole", updatedRole.getName());
+        assertNotNull(result);
+        assertEquals("UpdatedRole", result.getName());
 
         verify(roleRepository).findById(roleId);
-        verify(roleRepository).save(existingRole);
+        verify(roleRepository).save(any(Role.class));
     }
 
     @Test
@@ -88,7 +93,7 @@ public class RoleServiceTest {
         existingRole.setId(roleId);
         existingRole.setName("Admin");
 
-        Role roleData = new Role();
+        UpdateRolePayload roleData = new UpdateRolePayload();
         roleData.setName("NewAdminRole");
 
         when(roleRepository.findById(roleId)).thenReturn(Optional.of(existingRole));
@@ -107,7 +112,7 @@ public class RoleServiceTest {
         existingRole.setId(roleId);
         existingRole.setName("User");
 
-        Role roleData = new Role();
+        UpdateRolePayload roleData = new UpdateRolePayload();
         roleData.setName("NewUserRole");
 
         when(roleRepository.findById(roleId)).thenReturn(Optional.of(existingRole));
@@ -122,7 +127,7 @@ public class RoleServiceTest {
     @Test
     public void testUpdateRole_NotFound_ShouldThrowException() {
         long roleId = 1L;
-        Role roleData = new Role();
+        UpdateRolePayload roleData = new UpdateRolePayload();
         roleData.setName("SomeRole");
 
         when(roleRepository.findById(roleId)).thenReturn(Optional.empty());

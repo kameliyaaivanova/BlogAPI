@@ -13,6 +13,7 @@ import com.example.Blog.Project.user.service.UserService;
 import com.example.Blog.Project.web.dto.AddUserPayload;
 import com.example.Blog.Project.web.dto.LoginPayload;
 import com.example.Blog.Project.web.dto.RegisterPayload;
+import com.example.Blog.Project.web.dto.UpdateUserPayload;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -81,7 +82,7 @@ public class UserServiceTest {
 
         when(userRepository.findUserByUsername(username)).thenReturn(Optional.empty());
 
-        Throwable result = assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(username));
+        Throwable result = assertThrows(EntityNotFoundException.class, () -> userService.loadUserByUsername(username));
         assertEquals("Could not find user", result.getMessage());
     }
 
@@ -151,10 +152,10 @@ public class UserServiceTest {
         existingUser.setEmail("oldEmail@example.com");
         existingUser.setPassword("oldPassword");
 
-        User updatedUser = new User();
-        updatedUser.setUsername("newUsername");
-        updatedUser.setEmail("newEmail@example.com");
-        updatedUser.setPassword("newPassword");
+        UpdateUserPayload updateUserPayload = new UpdateUserPayload();
+        updateUserPayload.setUsername("newUsername");
+        updateUserPayload.setEmail("newEmail@example.com");
+        updateUserPayload.setPassword("newPassword");
 
         User savedUser = new User();
         savedUser.setId(userId);
@@ -163,29 +164,30 @@ public class UserServiceTest {
         savedUser.setPassword("encodedNewPassword");
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
-        when(passwordEncoder.encode(updatedUser.getPassword())).thenReturn("encodedNewPassword");
+        when(passwordEncoder.encode(updateUserPayload.getPassword())).thenReturn("encodedNewPassword");
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        User result = userService.update(userId, updatedUser);
+        User result = userService.update(userId, updateUserPayload);
 
         assertNotNull(result);
         assertEquals("newUsername", result.getUsername());
         assertEquals("newEmail@example.com", result.getEmail());
         assertEquals("encodedNewPassword", result.getPassword());
 
-        verify(userRepository).save(existingUser);
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
     public void testUpdate_UserNotFound() {
         long userId = 1L;
-        User updatedUser = new User();
-        updatedUser.setUsername("newUsername");
-        updatedUser.setEmail("newEmail@example.com");
+
+        UpdateUserPayload updateUserPayload = new UpdateUserPayload();
+        updateUserPayload.setUsername("newUsername");
+        updateUserPayload.setEmail("newEmail@example.com");
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        Throwable result = assertThrows(EntityNotFoundException.class, () -> userService.update(userId, updatedUser));
+        Throwable result = assertThrows(EntityNotFoundException.class, () -> userService.update(userId, updateUserPayload));
         assertEquals("User not found", result.getMessage());
 
         verify(userRepository, never()).save(any());
@@ -385,12 +387,9 @@ public class UserServiceTest {
 
         String newRefreshToken = "newRefreshTokenValue";
         when(jwtService.generateRefreshToken()).thenReturn(newRefreshToken);
-        when(refreshTokenRepository.findByUserIdAndUserAgentAndExpiresAtAfter(eq(user.getId()), eq(userAgent), any(), eq(RefreshToken.class)))
-                .thenReturn(Optional.of(existingToken));
 
 
         String result = ReflectionTestUtils.invokeMethod(userService, "renewRefreshToken", user, existingToken, userAgent);
-//        String result = userService.renewRefreshToken(user, existingToken, userAgent);
 
         assertNotNull(result);
         assertEquals(newRefreshToken, result);

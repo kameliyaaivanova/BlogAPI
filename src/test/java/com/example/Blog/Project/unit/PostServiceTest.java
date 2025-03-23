@@ -6,6 +6,7 @@ import com.example.Blog.Project.post.service.PostService;
 import com.example.Blog.Project.security.SecurityService;
 import com.example.Blog.Project.user.model.User;
 import com.example.Blog.Project.web.dto.AddPostPayload;
+import com.example.Blog.Project.web.dto.UpdatePostPayload;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -131,13 +132,15 @@ public class PostServiceTest {
     @Test
     public void testUpdatePostWhenPostIdNotExist() {
         long postId = 1L;
-        Post updatedPost = new Post();
-        updatedPost.setTitle("New Title");
+        UpdatePostPayload updatePayload = new UpdatePostPayload();
+        updatePayload.setTitle("New Title");
 
         when(postRepository.findById(postId)).thenReturn(Optional.empty());
 
-        Throwable result = Assertions.assertThrows(EntityNotFoundException.class, () -> postService.updatePost(postId, updatedPost));
-        Assertions.assertEquals("Category not found", result.getMessage());
+        Throwable result = Assertions.assertThrows(EntityNotFoundException.class,
+                () -> postService.updatePost(postId, updatePayload));
+
+        Assertions.assertEquals("Post not found", result.getMessage());
     }
 
     @Test
@@ -147,11 +150,11 @@ public class PostServiceTest {
         existingPost.setId(postId);
         existingPost.setTitle("Old Title");
 
-        Post updatedPost = new Post();
-        updatedPost.setTitle("New Title");
-        updatedPost.setContent("Updated Content");
-        updatedPost.setDescription("Updated Description");
-        updatedPost.setLogo("https://updated.logo.com");
+        UpdatePostPayload updatePayload = new UpdatePostPayload();
+        updatePayload.setTitle("New Title");
+        updatePayload.setContent("Updated Content");
+        updatePayload.setDescription("Updated Description");
+        updatePayload.setLogo("https://updated.logo.com");
 
         User user = new User();
         user.setUsername("UpdatedUser");
@@ -160,7 +163,7 @@ public class PostServiceTest {
         when(securityService.getUser()).thenReturn(user);
         when(postRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Post result = postService.updatePost(postId, updatedPost);
+        Post result = postService.updatePost(postId, updatePayload);
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals("New Title", result.getTitle());
@@ -187,7 +190,7 @@ public class PostServiceTest {
 
         when(postRepository.existsById(postId)).thenReturn(false);
 
-        Throwable result = assertThrows(IllegalArgumentException.class, () -> postService.deletePost(postId));
+        Throwable result = assertThrows(EntityNotFoundException.class, () -> postService.deletePost(postId));
         assertEquals("Post not found with id: " + postId, result.getMessage());
 
         // Verify that deleteById is **not** called

@@ -23,15 +23,11 @@ public class RefreshToken {
     @Id
     private Long id;
 
-    @Size(min = 10, message = "Invalid token")
-    @NotNull(message = "Token must be provided")
     @Column(nullable = false, unique = true)
     private String token;
 
-    @Size(min = 10, message = "Invalid token")
     private String oldToken;
 
-    @NotEmpty
     @Basic(optional = false)
     private String userAgent;
 

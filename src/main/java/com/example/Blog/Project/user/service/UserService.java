@@ -13,6 +13,7 @@ import com.example.Blog.Project.user.repository.UserRepository;
 import com.example.Blog.Project.web.dto.AddUserPayload;
 import com.example.Blog.Project.web.dto.LoginPayload;
 import com.example.Blog.Project.web.dto.RegisterPayload;
+import com.example.Blog.Project.web.dto.UpdateUserPayload;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -37,7 +38,6 @@ public class UserService implements UserDetailsService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
-
     private final JwtService jwtService;
     private final RefreshTokenRepository refreshTokenRepository;
 
@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
         Optional<User> userOpt = userRepository.findUserByUsername(username);
 
         if (userOpt.isEmpty()) {
-            throw new UsernameNotFoundException("Could not find user");
+            throw new EntityNotFoundException("Could not find user");
         }
 
         return new MyUserDetails(userOpt.get());
@@ -87,8 +87,12 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
     @Transactional(dontRollbackOn = AuthenticationFailedException.class)
-    public AuthResponse authenticate(@Valid final LoginPayload payload, final String userAgent) {
+    public AuthResponse authenticate(final LoginPayload payload, final String userAgent) {
         User user = null;
         RefreshToken refreshToken = null;
 
@@ -128,9 +132,6 @@ public class UserService implements UserDetailsService {
         return new AuthResponse(token, renewedRefreshToken);
     }
 
-    public Page<User> getAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
 
     private String renewRefreshToken(final User user, RefreshToken refreshToken, final String userAgent) {
         final String newRefreshTokenCode = jwtService.generateRefreshToken();
@@ -151,16 +152,16 @@ public class UserService implements UserDetailsService {
         return newRefreshTokenCode;
     }
 
-    public User update(long id, User user) {
+    public User update(long id, UpdateUserPayload updateUserPayload) {
         return userRepository.findById(id).map(existingUser -> {
-            existingUser.setRole(user.getRole());
+            existingUser.setRole(updateUserPayload.getRole());
 
-            if (user.getPassword() != null) {
-                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            if (updateUserPayload.getPassword() != null) {
+                existingUser.setPassword(passwordEncoder.encode(updateUserPayload.getPassword()));
             }
 
-            existingUser.setEmail(user.getEmail());
-            existingUser.setUsername(user.getUsername());
+            existingUser.setEmail(updateUserPayload.getEmail());
+            existingUser.setUsername(updateUserPayload.getUsername());
             return userRepository.save(existingUser);
         }).orElseThrow(() -> new EntityNotFoundException("User not found"));
     }

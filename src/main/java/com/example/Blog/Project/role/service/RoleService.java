@@ -4,6 +4,7 @@ import com.example.Blog.Project.category.model.Category;
 import com.example.Blog.Project.role.model.Role;
 import com.example.Blog.Project.role.repository.RoleRepository;
 import com.example.Blog.Project.web.dto.AddRolePayload;
+import com.example.Blog.Project.web.dto.UpdateRolePayload;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public class RoleService {
         return roleRepository.findAll(pageable);
     }
 
-    public Role update(long id, Role roleData) {
+    public Role update(long id, UpdateRolePayload roleData) {
         Role existingRole = roleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Role not found"));
 
         String roleName = existingRole.getName();

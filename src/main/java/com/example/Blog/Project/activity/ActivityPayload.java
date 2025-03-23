@@ -8,7 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ActivityPayload {
 
-    @NotNull
     private String path;
 
     private Long userId;

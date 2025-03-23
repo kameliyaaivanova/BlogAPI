@@ -86,7 +86,6 @@ public class FileServiceTest {
 
     @Test
     public void testCreateFile_InvalidFile_ShouldThrowException() throws IOException {
-
         MultipartFile input = mock(MultipartFile.class);
 
         when(input.getSize()).thenReturn(0L);
@@ -99,7 +98,6 @@ public class FileServiceTest {
 
     @Test
     public void testIsUuid_ValidUuid() {
-
         String validUuid = UUID.randomUUID().toString();
 
         boolean result = fileService.isUuid(validUuid);
@@ -122,7 +120,6 @@ public class FileServiceTest {
 
         List<File> files = List.of(new File(), new File());
         when(fileRepository.findAll()).thenReturn(files);
-        when(postRepository.existsByLogoContaining(any(UUID.class))).thenReturn(false);
         fileService.deleteUnusedFiles();
 
     }
@@ -132,7 +129,6 @@ public class FileServiceTest {
 
         List<File> files = List.of(new File());
         when(fileRepository.findAll()).thenReturn(files);
-        when(postRepository.existsByLogoContaining(any(UUID.class))).thenReturn(true);
 
         fileService.deleteUnusedFiles();
     }

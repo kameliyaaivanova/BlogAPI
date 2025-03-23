@@ -1,6 +1,7 @@
 package com.example.Blog.Project.refreshtoken.repository;
 
 import com.example.Blog.Project.refreshtoken.model.RefreshToken;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,8 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     boolean existsByOldToken(String token);
 
     void deleteByOldToken(String token);
+
+    boolean existsByToken(String refreshToken);
+
+    Optional<RefreshToken> findByToken(String refreshToken);
 }

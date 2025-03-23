@@ -3,8 +3,10 @@ package com.example.Blog.Project.category.service;
 import com.example.Blog.Project.category.model.Category;
 import com.example.Blog.Project.category.repository.CategoryRepository;
 import com.example.Blog.Project.web.dto.AddCategoryPayload;
+import com.example.Blog.Project.web.dto.UpdateCategoryPayload;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,9 +27,9 @@ public class CategoryService {
         return categoryRepository.findAll(pageable);
     }
 
-    public Category update(long id, Category updatedCategory) {
+    public Category update(long id, UpdateCategoryPayload updatePayload) {
         return categoryRepository.findById(id).map(category -> {
-            category.setTitle(updatedCategory.getTitle());
+            category.setTitle(updatePayload.getTitle());
             return categoryRepository.save(category);
         }).orElseThrow(() -> new EntityNotFoundException("Category not found"));
     }

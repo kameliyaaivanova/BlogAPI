@@ -4,6 +4,7 @@ import com.example.Blog.Project.post.model.Post;
 import com.example.Blog.Project.post.service.PostService;
 import com.example.Blog.Project.web.dto.AddPostPayload;
 import com.example.Blog.Project.web.dto.PresenceBody;
+import com.example.Blog.Project.web.dto.UpdatePostPayload;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,8 +40,8 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> update(@PathVariable long id, @Valid @RequestBody Post post){
-        return ResponseEntity.ok(postService.updatePost(id,post));
+    public ResponseEntity<Post> update(@PathVariable long id, @Valid @RequestBody UpdatePostPayload updatePostPayload){
+        return ResponseEntity.ok(postService.updatePost(id,updatePostPayload));
     }
 
     @DeleteMapping("/{id}")
@@ -48,5 +49,4 @@ public class PostController {
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
     }
-
 }

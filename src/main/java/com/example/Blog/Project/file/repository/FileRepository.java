@@ -12,4 +12,6 @@ public interface FileRepository extends JpaRepository<File, Long> {
     Optional<File> findById(UUID uuid);
 
     void deleteById(UUID uuid);
+
+    boolean existsById(UUID id);
 }

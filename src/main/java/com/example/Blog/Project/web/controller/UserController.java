@@ -6,6 +6,7 @@ import com.example.Blog.Project.user.service.UserService;
 import com.example.Blog.Project.web.dto.AddUserPayload;
 import com.example.Blog.Project.web.dto.LoginPayload;
 import com.example.Blog.Project.web.dto.RegisterPayload;
+import com.example.Blog.Project.web.dto.UpdateUserPayload;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +45,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<Page<User>> getAll(Pageable pageable) {
-        System.out.println("User Controlelr Invoker!!!!!");
+        System.out.println("User Controller Invoker!!!!!");
         return ResponseEntity.ok(userService.getAll(pageable));
     }
 
@@ -54,8 +55,8 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> update(@PathVariable long id, @Valid @RequestBody User user) {
-        return ResponseEntity.ok(userService.update(id, user));
+    public ResponseEntity<User> update(@PathVariable long id, @Valid @RequestBody UpdateUserPayload updateUserPayload) {
+        return ResponseEntity.ok(userService.update(id, updateUserPayload));
     }
 
     @PostMapping("/users/add")

@@ -4,6 +4,7 @@ import com.example.Blog.Project.post.model.Post;
 import com.example.Blog.Project.post.repository.PostRepository;
 import com.example.Blog.Project.security.SecurityService;
 import com.example.Blog.Project.web.dto.AddPostPayload;
+import com.example.Blog.Project.web.dto.UpdatePostPayload;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,10 +16,12 @@ import java.util.Optional;
 @Service
 public class PostService {
 
+    @Autowired
     private final PostRepository postRepository;
-    private final SecurityService securityService;
 
     @Autowired
+    private final SecurityService securityService;
+
     public PostService(PostRepository postRepository, SecurityService securityService) {
         this.postRepository = postRepository;
         this.securityService = securityService;
@@ -55,24 +58,22 @@ public class PostService {
 
     }
 
-    public Post updatePost(long id, Post updatedPost) {
+    public Post updatePost(long id, UpdatePostPayload updatePayload) {
         return postRepository.findById(id).map(post -> {
-            post.setTitle(updatedPost.getTitle());
-            post.setCategories(updatedPost.getCategories());
+            post.setTitle(updatePayload.getTitle());
+            post.setCategories(updatePayload.getCategories());
             post.setAuthor(securityService.getUser().getUsername());
-            post.setContent(updatedPost.getContent());
-            post.setCreatedAt(updatedPost.getCreatedAt());
-            post.setDescription(updatedPost.getDescription());
-            post.setLogo(updatedPost.getLogo());
-
+            post.setContent(updatePayload.getContent());
+            post.setDescription(updatePayload.getDescription());
+            post.setLogo(updatePayload.getLogo());
             return postRepository.save(post);
-        }).orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        }).orElseThrow(() -> new EntityNotFoundException("Post not found"));
     }
 
     public void deletePost(long id) {
 
         if (!postRepository.existsById(id)){
-            throw new IllegalArgumentException("Post not found with id: " + id);
+            throw new EntityNotFoundException("Post not found with id: " + id);
         }
 
         postRepository.deleteById(id);

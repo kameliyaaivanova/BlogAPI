@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class PermissionService {
 
+    @Autowired
     private final PermissionRepository permissionRepository;
 
-    @Autowired
     public PermissionService(PermissionRepository permissionRepository) {
         this.permissionRepository = permissionRepository;
     }
