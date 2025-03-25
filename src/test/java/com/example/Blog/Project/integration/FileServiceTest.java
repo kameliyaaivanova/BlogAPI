@@ -7,6 +7,7 @@ import com.example.Blog.Project.file.service.FileService;
 import com.example.Blog.Project.post.model.Post;
 import com.example.Blog.Project.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,42 +89,6 @@ public class FileServiceTest extends BaseTest {
 
         assertFalse(result);
     }
-
-//    @Test
-//    public void testDeleteUnusedFiles_ShouldDeleteUnusedFiles() throws Exception {
-//        File fileToDelete = new File();
-//        fileToDelete.setContent("unused file".getBytes());
-//        fileRepository.save(fileToDelete);
-//
-//        File usedFile = new File();
-//        usedFile.setContent("used file".getBytes());
-//        fileRepository.save(usedFile);
-//        Post post = new Post();
-//        post.setLogo(String.valueOf(usedFile.getId()));
-//        postRepository.save(post);
-//
-//        fileService.deleteUnusedFiles();
-//
-//        assertFalse(fileRepository.existsById(fileToDelete.getId()));
-//        assertTrue(fileRepository.existsById(usedFile.getId()));
-//        verify(restTemplate, times(1)).postForObject(eq(statisticsServiceUrl + "/files/add"), any(), eq(DeletedFiles.class));
-//    }
-
-//    @Test
-//    public void testDeleteUnusedFiles_ShouldNotDeleteUsedFiles() throws Exception {
-//        File usedFile = new File();
-//        usedFile.setContent("used file".getBytes());
-//        fileRepository.save(usedFile);
-//
-//        Post post = new Post();
-//        post.setLogo(String.valueOf(usedFile.getId()));
-//        post.setDescription("");
-//        postRepository.save(post);
-//
-//        fileService.deleteUnusedFiles();
-//
-//        assertTrue(fileRepository.existsById(usedFile.getId()));
-//    }
 
     @Test
     public void testDeleteUnusedFiles_ShouldSendToStatisticsService() throws Exception {

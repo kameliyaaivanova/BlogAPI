@@ -28,7 +28,6 @@ public class User {
     @Column(nullable = false,unique = true)
     private String username;
 
-    @Email(message = "Email cannot be null")
     @Column(nullable = false,unique = true)
     private String email;
 

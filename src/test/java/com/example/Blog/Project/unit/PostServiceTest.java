@@ -58,7 +58,6 @@ public class PostServiceTest {
 
     @Test
     public void testGetAllPostsWhenCategoryIdIsNull() {
-        // Arrange: Mock repository to return a page of posts
         Pageable pageable = PageRequest.of(0, 10);
         Post post = new Post();
         post.setTitle("Test Post");
@@ -66,10 +65,8 @@ public class PostServiceTest {
         Page<Post> mockPage = new PageImpl<>(List.of(post));
         when(postRepository.findAll(pageable)).thenReturn(mockPage);
 
-        // Act: Call the service method
         Page<Post> result = postService.getAll(pageable, null);
 
-        // Assert: Verify the result
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.getTotalElements());
         Assertions.assertEquals("Test Post", result.getContent().get(0).getTitle());
@@ -77,7 +74,6 @@ public class PostServiceTest {
 
     @Test
     public void testGetAllPostsByCategoryId() {
-        // Arrange: Mock repository to return a page of posts filtered by category
         Pageable pageable = PageRequest.of(0, 10);
         Post post = new Post();
         post.setTitle("Category Post");
@@ -85,10 +81,8 @@ public class PostServiceTest {
         Page<Post> mockPage = new PageImpl<>(List.of(post));
         when(postRepository.findByCategoriesId(1L, pageable)).thenReturn(mockPage);
 
-        // Act: Call the service method
         Page<Post> result = postService.getAll(pageable, 1L);
 
-        // Assert: Verify the result
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.getTotalElements());
         Assertions.assertEquals("Category Post", result.getContent().get(0).getTitle());
@@ -193,7 +187,6 @@ public class PostServiceTest {
         Throwable result = assertThrows(EntityNotFoundException.class, () -> postService.deletePost(postId));
         assertEquals("Post not found with id: " + postId, result.getMessage());
 
-        // Verify that deleteById is **not** called
         verify(postRepository, never()).deleteById(anyLong());
     }
 

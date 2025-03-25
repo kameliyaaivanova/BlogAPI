@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class AuthResponse {
 
-    @NotBlank
     private String token;
 
-    @NotBlank
     private String refreshToken;
 }

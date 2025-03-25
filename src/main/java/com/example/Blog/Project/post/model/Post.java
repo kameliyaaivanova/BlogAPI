@@ -21,25 +21,21 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotBlank
     @Column(nullable = false)
     private String title;
 
-    @NotBlank
     @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
     private String author;
 
-    @NotBlank
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
 
-    @NotBlank
     private String logo;
 
     @ManyToMany
