@@ -31,7 +31,6 @@ public class RefreshToken {
     @Basic(optional = false)
     private String userAgent;
 
-    @NotNull
     @Basic(optional = false)
     private Instant expiresAt;
 
