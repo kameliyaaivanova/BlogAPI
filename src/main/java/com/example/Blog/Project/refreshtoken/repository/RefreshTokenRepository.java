@@ -14,8 +14,6 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
 
     <T> Optional<T> findByUserIdAndUserAgentAndExpiresAtAfter(Long id, String userAgent, Instant now, Class<T> type);
 
-    <T> Optional<T> findByOldToken(String token, Class<T> type);
-
     boolean existsByOldToken(String token);
 
     void deleteByOldToken(String token);

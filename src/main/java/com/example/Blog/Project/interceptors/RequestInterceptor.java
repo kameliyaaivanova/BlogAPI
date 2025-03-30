@@ -22,6 +22,7 @@ public class RequestInterceptor implements HandlerInterceptor {
     private final RestTemplate restTemplate;
 
     private final String statisticsServiceUrl;
+
     private final SecurityService securityService;
 
     @Autowired

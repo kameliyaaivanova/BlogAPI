@@ -36,6 +36,7 @@ public class Post {
     @Column(nullable = false)
     private Instant createdAt = Instant.now();
 
+    @Column
     private String logo;
 
     @ManyToMany

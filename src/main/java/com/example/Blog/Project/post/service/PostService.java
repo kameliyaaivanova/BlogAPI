@@ -16,12 +16,11 @@ import java.util.Optional;
 @Service
 public class PostService {
 
-    @Autowired
     private final PostRepository postRepository;
 
-    @Autowired
     private final SecurityService securityService;
 
+    @Autowired
     public PostService(PostRepository postRepository, SecurityService securityService) {
         this.postRepository = postRepository;
         this.securityService = securityService;

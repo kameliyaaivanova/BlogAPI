@@ -14,8 +14,6 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     Optional<Post> findByTitle(String title);
 
-    boolean existsByTitle(String title);
-
     Page<Post> findByCategoriesId(Long categoryId, Pageable pageable);
 
     boolean existsByLogoContaining(UUID uuid);

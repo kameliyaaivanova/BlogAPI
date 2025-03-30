@@ -13,5 +13,4 @@ public interface FileRepository extends JpaRepository<File, Long> {
 
     void deleteById(UUID uuid);
 
-    boolean existsById(UUID id);
 }

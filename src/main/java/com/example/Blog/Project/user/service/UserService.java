@@ -16,7 +16,6 @@ import com.example.Blog.Project.web.dto.RegisterPayload;
 import com.example.Blog.Project.web.dto.UpdateUserPayload;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -53,7 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/posts/**").hasAnyAuthority(PermissionOption.UPDATE_POSTS.getAbbreviation())
                         .requestMatchers(HttpMethod.DELETE, "/posts/**").hasAnyAuthority(PermissionOption.DELETE_POSTS.getAbbreviation())
 
-                        // Posts
+                        // Roles
                         .requestMatchers(HttpMethod.GET, "/roles/**").hasAnyAuthority(PermissionOption.READ_ROLES.getAbbreviation())
                         .requestMatchers(HttpMethod.POST, "/roles/**").hasAnyAuthority(PermissionOption.CREATE_ROLES.getAbbreviation())
                         .requestMatchers(HttpMethod.PUT, "/roles/**").hasAnyAuthority(PermissionOption.UPDATE_ROLES.getAbbreviation())
