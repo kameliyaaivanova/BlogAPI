@@ -39,6 +39,12 @@ public class PostController {
         return ResponseEntity.ok(postService.createPost(addPostPayload));
     }
 
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<Post> likePost(@PathVariable Long postId) {
+        Post updatedPost = postService.incrementLikes(postId);
+        return ResponseEntity.ok(updatedPost);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Post> update(@PathVariable long id, @Valid @RequestBody UpdatePostPayload updatePostPayload){
         return ResponseEntity.ok(postService.updatePost(id,updatePostPayload));

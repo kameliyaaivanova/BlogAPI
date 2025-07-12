@@ -51,6 +51,13 @@ public class PostService {
         return postRepository.findByCategoriesId(categoryId, pageable);
     }
 
+    public Post incrementLikes(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        post.setLikes(post.getLikes() + 1);
+        return postRepository.save(post);
+    }
+
     public Post findPost(long id) {
        return postRepository.findById(id)
                .orElseThrow(() -> new EntityNotFoundException("Post with id [%d] does not exist.".formatted(id)));

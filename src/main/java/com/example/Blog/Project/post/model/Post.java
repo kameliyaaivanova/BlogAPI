@@ -39,6 +39,9 @@ public class Post {
     @Column
     private String logo;
 
+    @Column(nullable = false)
+    private int likes = 0;
+
     @ManyToMany
     private Set<Category> categories = new HashSet<>();
 }
