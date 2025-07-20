@@ -26,7 +26,8 @@ public class SecurityService {
 
         User user = objectMapper.convertValue(authentication.getPrincipal(), User.class);
 
-        return user;    }
+        return user;
+    }
 
     public String getToken() {
         Authentication authentication = getAuthentication();

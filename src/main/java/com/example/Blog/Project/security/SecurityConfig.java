@@ -49,6 +49,8 @@ public class SecurityConfig {
 
                         // Posts
                         .requestMatchers(HttpMethod.GET, "/posts/**").hasAnyAuthority(PermissionOption.READ_POSTS.getAbbreviation())
+                        .requestMatchers(HttpMethod.PUT, "/posts/*/like").hasAnyAuthority(PermissionOption.READ_POSTS.getAbbreviation())
+                        .requestMatchers(HttpMethod.GET, "/posts/**").hasAnyAuthority(PermissionOption.READ_POSTS.getAbbreviation())
                         .requestMatchers(HttpMethod.POST, "/posts/**").hasAnyAuthority(PermissionOption.CREATE_POSTS.getAbbreviation())
                         .requestMatchers(HttpMethod.PUT, "/posts/**").hasAnyAuthority(PermissionOption.UPDATE_POSTS.getAbbreviation())
                         .requestMatchers(HttpMethod.DELETE, "/posts/**").hasAnyAuthority(PermissionOption.DELETE_POSTS.getAbbreviation())

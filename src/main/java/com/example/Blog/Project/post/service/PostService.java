@@ -1,8 +1,13 @@
 package com.example.Blog.Project.post.service;
 
 import com.example.Blog.Project.post.model.Post;
+import com.example.Blog.Project.post.model.PostLike;
+import com.example.Blog.Project.post.repository.PostLikeRepository;
 import com.example.Blog.Project.post.repository.PostRepository;
 import com.example.Blog.Project.security.SecurityService;
+import com.example.Blog.Project.user.model.User;
+import com.example.Blog.Project.user.repository.UserRepository;
+import com.example.Blog.Project.user.service.UserService;
 import com.example.Blog.Project.web.dto.AddPostPayload;
 import com.example.Blog.Project.web.dto.UpdatePostPayload;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,10 +25,19 @@ public class PostService {
 
     private final SecurityService securityService;
 
+    private final UserRepository userRepository;
+
+    private final PostLikeRepository postLikeRepository;
+    private final UserService userService;
+
+
     @Autowired
-    public PostService(PostRepository postRepository, SecurityService securityService) {
+    public PostService(PostRepository postRepository, SecurityService securityService, UserRepository userRepository, PostLikeRepository postLikeRepository, UserService userService) {
         this.postRepository = postRepository;
         this.securityService = securityService;
+        this.userRepository = userRepository;
+        this.postLikeRepository = postLikeRepository;
+        this.userService = userService;
     }
 
     public Post createPost(AddPostPayload addPostPayload) {
@@ -51,10 +65,23 @@ public class PostService {
         return postRepository.findByCategoriesId(categoryId, pageable);
     }
 
-    public Post incrementLikes(Long postId) {
+    public Post toggleLike(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
-        post.setLikes(post.getLikes() + 1);
+
+        Optional<PostLike> existingLike = postLikeRepository.findByUserAndPost(securityService.getUser(), post);
+
+        if (existingLike.isPresent()) {
+            postLikeRepository.delete(existingLike.get());
+            post.setLikes(post.getLikes() - 1);
+        } else {
+            PostLike postLike = new PostLike();
+            postLike.setPost(post);
+            postLike.setUser(securityService.getUser());
+            postLikeRepository.save(postLike);
+            post.setLikes(post.getLikes() + 1);
+        }
+
         return postRepository.save(post);
     }
 
@@ -77,11 +104,9 @@ public class PostService {
     }
 
     public void deletePost(long id) {
-
         if (!postRepository.existsById(id)){
             throw new EntityNotFoundException("Post not found with id: " + id);
         }
-
         postRepository.deleteById(id);
     }
 }
