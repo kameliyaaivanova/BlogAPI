@@ -186,6 +186,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("User not found with id: " + id);
         }
 
+        refreshTokenRepository.deleteByUser_Id(id);
         userRepository.deleteById(id);
     }
 
