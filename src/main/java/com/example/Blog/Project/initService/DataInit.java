@@ -177,7 +177,7 @@ public class DataInit implements CommandLineRunner {
         techAndAlPost1.setDescription("AI is evolving rapidly, and these five tools will transform how we work, communicate, and live.");
         techAndAlPost1.setCreatedAt(Instant.now());
         techAndAlPost1.setTitle("5 AI Tools That Will Change Your Daily Life in 2025");
-        techAndAlPost1.setLogo("https://blogibsamericas.com/wp-content/uploads/2023/07/Novo-Projeto-3-1-1.png");
+        techAndAlPost1.setLogo("https://reviewnprep.com/blog/wp-content/uploads/2023/05/AI-Tools-and-Frameworks.jpg");
         techAndAlPost1.setContent("AI is revolutionizing our daily routines, making tasks easier and faster. ChatGPT helps with writing and brainstorming, while Midjourney creates stunning AI-generated images. Notion AI enhances productivity by organizing notes and tasks efficiently. ElevenLabs is making voice generation more realistic than ever. Finally, Perplexity AI acts as a supercharged search engine, delivering quick and accurate answers. These tools are just the beginning of AI’s transformation in our lives.");
 
         Post techAndAlPost2 = new Post();
